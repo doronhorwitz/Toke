@@ -3,137 +3,98 @@
 ;(function tokeModule(module, window, undefined) {
     "use strict";
     
-    //from Moment.js
-    var formattingTokens = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|YYYYY|YYYY|YY|a|A|hh?|HH?|mm?|ss?|SS?S?|X|zz?|ZZ?|.)/g;
+    var VERSION          = "0.1.0",
+        //regex from Moment.js
+        formattingTokens     = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|YYYYY|YYYY|YY|a|A|hh?|HH?|mm?|ss?|SS?S?|X|zz?|ZZ?|.)/g,
+        momentjsTokens       = ["M","Mo","MM","MMM","MMMM","D","Do","DD","DDD","DDDo","DDDD","d","do","ddd","dddd","w","wo","ww","W","Wo","WW","YY","YYYY","A","a","H","HH","h","hh","m","mm","s","ss","S","SS","SSS","z","zz","Z","ZZ","X"],
+        lookupRequiredFields = [
+            ["noTranslationMarker","string"],
+            ["tokenPrefix","string"],
+            ["tokenSuffix","string"],
+            ["escapePrefix","string"],
+            ["escapeSuffix","string"],
+            ["tokens","object"]
+        ],
+        lookupDefaultValues  = {
+            "string": "",
+            "object": {}
+        };
 
     module.tokenLookup = {
         sugar: {
-            noTranslation: "{}",
+            noTranslationMarker: "{}",
+            tokenPrefix:         "{",
+            tokenSuffix:         "}",
             tokens: {
-                //Month
-                M:    "{M}",         //1 2 ... 11 12
-                Mo:   null,          //1st 2nd ... 11th 12th
-                MM:   "{MM}",        //01 02 ... 11 12
-                MMM:  "{Mon}",       //Jan Feb ... Nov Dec
-                MMMM: "{Month}",     //January February ... November December
-                //Day of Month
-                D:    "{d}",         //1 2 ... 30 30
-                Do:   "{ord}",       //1st 2nd ... 30th 31st
-                DD:   "{dd}",        //01 02 ... 30 31
-                //Day of Year
-                DDD:  null,          //1 2 ... 364 365
-                DDDo: null,          //1st 2nd ... 364th 365th
-                DDDD: null,          //001 002 ... 364 365
-                //Day of Week
-                d:    null,          //0 1 ... 5 6
-                do:   null,          //0th 1st ... 5th 6th
-                ddd:  "{Dow}",       //Sun Mon ... Fri Sat
-                dddd: "{Weekday}",   //Sunday Monday ... Friday Saturday
-                //Week of Year
-                w:    null,          //1 2 ... 52 53
-                wo:   null,          //1st 2nd ... 52nd 53rd
-                ww:   null,          //01 02 ... 52 53
-                //ISO Week of Year
-                W:    null,          //1 2 ... 52 53
-                Wo:   null,          //1st 2nd ... 52nd 53rd
-                WW:   null,          //01 02 ... 52 53
-                //Year           
-                YY:   "{yy}",        //70 71 ... 29 30
-                YYYY: "{yyyy}",      //1970 1971 ... 2029 2030
-                //AM/PM
-                A:    "{tt}",        //AM PM
-                a:    "{Tt}",        //am pm
-                //Hour           
-                H:    "{H}",         //0 1 ... 22 23
-                HH:   "{HH}",        //00 01 ... 22 23
-                h:    "{h}",         //1 2 ... 11 12
-                hh:   "{hh}",        //01 02 ... 11 12
-                //Minute
-                m:    "{m}",         //0 1 ... 58 59
-                mm:   "{mm}",        //00 01 ... 58 59
-                //Second
-                s:    "{s}",         //0 1 ... 58 59
-                ss:   "{ss}",        //00 01 ... 58 59
-                //Fractional Second
-                S:    null,          //0 1 ... 8 9
-                SS:   "{ff}",        //0 1 ... 98 99
-                SSS:  "{f}",         //0 1 ... 998 999
-                //Timezone
-                z:    null,          //EST CST ... MST PST 
-                zz:   null,          //Same as "z"
-                Z:    "{isotz}",     //-07:00 -06:00 ... +06:00 +07:00
-                ZZ:   "{tz}",        //-0700 -0600 ... +0600 +0700
-                //Unix Timestamp
-                X:    null           //1360013296
+                M:    "M",
+                MM:   "MM",
+                MMM:  "Mon",
+                MMMM: "Month",
+                D:    "d",
+                Do:   "ord",
+                DD:   "dd",
+                ddd:  "Dow",
+                dddd: "Weekday",
+                YY:   "yy",
+                YYYY: "yyyy",
+                A:    "tt",
+                a:    "Tt",
+                H:    "H",
+                HH:   "HH",
+                h:    "h",
+                hh:   "hh",
+                m:    "m",
+                mm:   "mm",
+                s:    "s",
+                ss:   "ss",
+                SS:   "ff",
+                SSS:  "f",
+                Z:    "isotz",
+                ZZ:   "tz",
             }
         },
         jqueryui: {
-            noTranslation: "[]",
             tokens: {
-                //Month
-                M:    "m",          //1 2 ... 11 12
-                Mo:   null,         //1st 2nd ... 11th 12th
-                MM:   "mm",         //01 02 ... 11 12
-                MMM:  "M",          //Jan Feb ... Nov Dec
-                MMMM: "MM",         //January February ... November December
-                //Day of Month
-                D:    "d",          //1 2 ... 30 30
-                Do:   null,         //1st 2nd ... 30th 31st
-                DD:   "dd",         //01 02 ... 30 31
-                //Day of Year
-                DDD:  "o",          //1 2 ... 364 365
-                DDDo: null,         //1st 2nd ... 364th 365th
-                DDDD: "oo",         //001 002 ... 364 365
-                //Day of Week
-                d:    null,         //0 1 ... 5 6
-                do:   null,         //0th 1st ... 5th 6th
-                ddd:  "D",          //Sun Mon ... Fri Sat
-                dddd: "DD",         //Sunday Monday ... Friday Saturday
-                //Week of Year
-                w:    null,         //1 2 ... 52 53
-                wo:   null,         //1st 2nd ... 52nd 53rd
-                ww:   null,         //01 02 ... 52 53
-                //ISO Week of Year
-                W:    null,         //1 2 ... 52 53
-                Wo:   null,         //1st 2nd ... 52nd 53rd
-                WW:   null,         //01 02 ... 52 53
-                //Year           
-                YY:   "y",          //70 71 ... 29 30
-                YYYY: "yy",         //1970 1971 ... 2029 2030
-                //AM/PM
-                A:    null,         //AM PM
-                a:    null,         //am pm
-                //Hour           
-                H:    null,         //0 1 ... 22 23
-                HH:   null,         //00 01 ... 22 23
-                h:    null,         //1 2 ... 11 12
-                hh:   null,         //01 02 ... 11 12
-                //Minute
-                m:    null,         //0 1 ... 58 59
-                mm:   null,         //00 01 ... 58 59
-                //Second
-                s:    null,         //0 1 ... 58 59
-                ss:   null,         //00 01 ... 58 59
-                //Fractional Second
-                S:    null,         //0 1 ... 8 9
-                SS:   null,         //0 1 ... 98 99
-                SSS:  null,         //0 1 ... 998 999
-                //Timezone
-                z:    null,         //EST CST ... MST PST 
-                zz:   null,         //Same as "z"
-                Z:    null,         //-07:00 -06:00 ... +06:00 +07:00
-                ZZ:   null,         //-0700 -0600 ... +0600 +0700
-                //Unix Timestamp
-                X:    "@"           //1360013296
+                M:    "m",
+                MM:   "mm",
+                MMM:  "M",
+                MMMM: "MM",
+                D:    "d",
+                DD:   "dd",
+                DDD:  "o",
+                DDDD: "oo",
+                ddd:  "D",
+                dddd: "DD",
+                YY:   "y",
+                YYYY: "yy",
+                X:    "@"
             }
+        },
+        testlibrary: "string"
+    };
 
+    module.convert = function convert(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters) {
+        var libraryName               = libraryName.toLowerCase(),
+            replaceUnregonisedTokens  = (typeof replaceUntranslatableTokens !== "boolean")?false:replaceUntranslatableTokens,
+            translateEscapeCharacters = (typeof translateEscapeCharacters !== "boolean")?true:translateEscapeCharacters;
+
+        if (libraryName in module.tokenLookup) {
+            return doConversion(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters);
+        } else if (libraryName === "momentjs") {
+            return originalFormatString
+        } else {
+            throw new TokeError("library name not recognised");
         }
     };
 
+    module.version = VERSION;
+
     //from Moment.js
-    function removeFormattingTokens(input) {
-        if (input.match(/\[.*\]/)) {
-            return input.replace(/^\[|\]$/g, "");
+    function removeFormattingTokens(input, libraryName, translateEscapeCharacters) {
+        if (translateEscapeCharacters && input.match(/\[.*\]/)) {
+            return input
+                .replace(/^\[/g,module.tokenLookup[libraryName].escapePrefix)
+                .replace(/\]$/g,module.tokenLookup[libraryName].escapeSuffix);
         }
         return input.replace(/\\/g, "");
     }
@@ -144,34 +105,55 @@
         for (i = 0, length = array.length; i < length; i++) {
             var lookedUpToken = module.tokenLookup[libraryName].tokens[array[i]];
             if (lookedUpToken) {
-                array[i] = lookedUpToken;
+                array[i] =  module.tokenLookup[libraryName].tokenPrefix +
+                            lookedUpToken +
+                            module.tokenLookup[libraryName].tokenSuffix;
             } else if ((lookedUpToken === null) && replaceUntranslatableTokens) {
-                array[i] = module.tokenLookup[libraryName].noTranslation||"";
+                array[i] = module.tokenLookup[libraryName].noTranslationMarker||"";
             } else {
-                array[i] = removeFormattingTokens(array[i]);
+                array[i] = removeFormattingTokens(array[i], libraryName, translateEscapeCharacters);
             }
         }
         return array.join("");
     }
 
-    module.convert = function convert(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters) {
-        var libraryName =               libraryName.toLowerCase(),
-            replaceUnregonisedTokens =  (typeof replaceUntranslatableTokens !== "boolean")?false:replaceUntranslatableTokens,
-            translateEscapeCharacters = (typeof translateEscapeCharacters !== "boolean")?false:translateEscapeCharacters;
-
-        if (libraryName in module.tokenLookup) {
-            return doConversion(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters);
-        } else if (libraryName === "moment") {
-            return originalFormatString
-        } else {
-            throw new TokeError("library name not recognised");
-        }
-    };
 
     function TokeError(message) {
         this.message = message + " (Toke error)";
     }
     TokeError.prototype = new Error();
     TokeError.prototype.constructor = TokeError;
+
+
+    //resiliency for externally added library token lookups
+    for (var libraryName in module.tokenLookup) {
+        if (Object.prototype.hasOwnProperty.call(module.tokenLookup, libraryName)) {
+
+            //ensure lookup is an object
+            if (typeof module.tokenLookup[libraryName] !== "object") {
+                module.tokenLookup[libraryName] = {};
+            }
+
+            var i;
+
+            //ensure the lookup has all the required fields
+            for (i = 0; i < lookupRequiredFields.length; i++) {
+                var lookupFieldName = lookupRequiredFields[i][0],
+                    lookupFieldType = lookupRequiredFields[i][1],
+                    libraryLookup   = module.tokenLookup[libraryName];
+
+                if (typeof libraryLookup[lookupFieldName] !== lookupFieldType) {
+                    libraryLookup[lookupFieldName] = lookupDefaultValues[lookupFieldType]
+                }
+            }
+
+            //ensure that all the lookup tokens that aren't strings, become null
+            for (i = 0; i < momentjsTokens.length; i++) {
+                if (typeof module.tokenLookup[libraryName].tokens[momentjsTokens[i]] !== "string") {
+                    module.tokenLookup[libraryName].tokens[momentjsTokens[i]] = null;
+                }
+            }
+        }   
+    }
 
 }(window.Toke = window.Toke||{}, window));

@@ -36,7 +36,10 @@ The function takes the following arguments:
     * Default: `false`
     * Description: if `true` the tokens that do not have a direct translation from the Moment.js syntax are replaced with a `noTranslation` marker. If `false` the original Moment.js token appears in the final string.
 * **translateEscapeCharacters**
-    * *Not implemented yet*
+    * Type: boolean
+    * Required: no
+    * Default: `true`
+    * Description: Moment.js uses the `[ ]` escape characters to deliniate that a token should not be processed as a token but rather as a string. If `translateEscapeCharacters` is set to `true` then the escape characters will be removed (or replaced with the escape characters of the destination library) in the output string, if `false` they will appear in the final string.
 
 ### Examples
 ```javascript
