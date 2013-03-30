@@ -4,8 +4,28 @@ By [Doron Horwitz](http://milktek.com/ "milktek.com")
 
 Description
 -----------
-Use a single datetime token syntax throughout your project, irrespective of any 3rd party date-related library you may use.  
-Toke uses the datetime formatting tokens of the [Moment.js library](http://momentjs.com/ "Moment.js").
+Use a single datetime token syntax throughout your project, irrespective of any 3rd party date-related library you may use. Toke uses a single token syntax and allows you to output a version which can be understood by the different libraries in your project.
+
+This allows you to set a single datetime format in a settings file and then ensure that any changes you make it to will be reflected across the whole project if you are using different libraries for date formatting.
+
+Toke uses the datetime formatting tokens of the [Moment.js library](http://momentjs.com/ "Moment.js") as its universal token syntax.
+
+For example, say you are using Datejs for outputting a date in a particular format, but you also need your JqueryUI datepicker to display its date with the exact same format.
+So if the format you wanted was, in Moment.js syntax, `DD-MMMM-YYYY`, you would set it globally:
+```javascript
+globalFormat = "DD-MMMM-YYYY";
+```
+Then to specify your jQueryUI's datepickers format, you would do:
+```javascript
+$( ".selector" ).datepicker({ dateFormat: Toke.convert(globalFormat,"jqueryui") });
+````
+And to output a date using Datejs, you would do:
+```javascript
+var myDate        = Date(),
+    formattedDate = myDate.toString(Toke.convert(globalFormat,"datejs"));
+
+alert(formattedDate);
+```
 
 Installation
 ------------
