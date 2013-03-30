@@ -53,7 +53,11 @@ Will output `dd MM yy, HH:mm:ss`, since jQueryUI does not support time token ele
 ```javascript
 Toke.convert('DD MMMM YYYY, HH:mm:ss','jqueryui', true)
 ```
-Will output `dd MM yy, []:[]:[]`, since jQueryUI does not support time token elements, `replaceUntranslatableTokens` is set to `true` and the `noTranslation` token is specified as `[]`.
+Will output `dd MM yy, ::`, since jQueryUI does not support time token elements, `replaceUntranslatableTokens` is set to `true` and the `noTranslation` token is specified as an empty string.
+```javascript
+Toke.convert('DD MMMM [YYYY], HH:mm:ss','datejs')
+```
+Note that `YYYY` should translate to a `yyyy` Datejs token but the above will output `dd MMMM YYYY, HH:mm:ss`, since `[ ]` deliniates escape characters in Moment.js' token syntax and Datejs does not have an `escapePrefix` or `escapeSuffix` and `translateExcapeCharacters` defaults to `true`.
 
 <a id="support"></a>Support
 -------
@@ -64,8 +68,16 @@ Toke currently supports conversion into the syntax of the following libraries:
 * [jQueryUI](http://jqueryui.com "jQuery UI")
     * Support for the [$.datepicker.formatDate()](http://docs.jquery.com/UI/Datepicker/formatDate "$.datepicker.formatDate()") and [$.datepicker.parseDate()](http://docs.jquery.com/UI/Datepicker/parseDate "$.datepicker.parseDate()") functions.
     * *libraryName* attribute: `jqueryui`
-* More to come...
+* [Datejs](http://www.datejs.com "Datejs")
+    * See the section on `toString()` [FormatSpecifiers](http://code.google.com/p/datejs/wiki/FormatSpecifiers "Datejs FormatSpecifiers")
+    * *libraryName* attribute: `datejs`
+* *More to come...*
 
+Extending
+---------
+If you need Toke to support a library it does not currently support, it is possible to add your own custom token dictionary lookup *before* Toke is included.
+For an example, see the example [custom_tokens.js](https://raw.github.com/doronhorwitz/Toke/master/custom_tokens.js "custom_tokens.js on GitHub") file for how to specify a custom lookup.  
+**Note that you have to specify the custom lookup before the Toke script is included, otherwise it will be ignored.**
 
 License
 -------
