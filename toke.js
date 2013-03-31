@@ -93,6 +93,37 @@
                     s:    "s",
                     ss:   "ss"
                 }
+            },
+            stevenlevithan: {
+                escapePrefix: "'",
+                escapeSuffix: "'",
+                tokens: {
+                    M:    "m",
+                    MM:   "mm",
+                    MMM:  "mmm",
+                    MMMM: "mmmm",
+                    D:    "d",
+                    Do:   "dS",
+                    DD:   "dd",
+                    ddd:  "ddd",
+                    dddd: "dddd",
+                    YY:   "yy",
+                    YYYY: "yyyy",
+                    A:    "TT",
+                    a:    "tt",
+                    H:    "H",
+                    HH:   "HH",
+                    h:    "h",
+                    hh:   "hh",
+                    m:    "M",
+                    mm:   "MM",
+                    s:    "s",
+                    ss:   "ss",
+                    SS:   "L",
+                    SSS:  "l",
+                    z:    "Z",
+                    ZZ:   "o"
+                }
             }
         };
 

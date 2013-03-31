@@ -91,6 +91,8 @@ Toke currently supports conversion into the syntax of the following libraries:
 * [Datejs](http://www.datejs.com "Datejs")
     * See the section on `toString()` [FormatSpecifiers](http://code.google.com/p/datejs/wiki/FormatSpecifiers "Datejs FormatSpecifiers")
     * *libraryName* attribute: `datejs`
+* [Steven Levithan's Date Format](http://blog.stevenlevithan.com/archives/date-time-format "Steven Levithan's Date Format")
+    * *libraryName* attribute: `stevenlevithan`
 * [Moment.js](http://momentjs.com "Moment.js")
     * Obviously.
     * Will ignore `replaceUntranslatableTokens` and `translateEscapeCharacters` and output the input format string untouched.
