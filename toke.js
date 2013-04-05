@@ -1,5 +1,20 @@
-//Base fomatting tokens are those of Moment.js (www.momentjs.com)
-//Therefore this module uses the Regex's and Regex functionality from Moment.js
+/*!
+ * Toke v0.1.0
+ * Doron Horwitz
+ * https://github.com/doronhorwitz/Toke
+ * Date: 2013-04-05
+ *
+ * Copyright 2013 Doron Horwitz
+ * Released under the BSD New License
+ * https://raw.github.com/doronhorwitz/Toke/master/LICENSE
+
+ * Makes use of functionality, regexes and formatting tokens from Moment.js
+ * by Tim Wood
+ * http://momentjs.com/
+ * License: https://raw.github.com/timrwood/moment/develop/LICENSE
+ *
+ */
+
 ;(function tokeModule(module, window, undefined) {
     "use strict";
     
