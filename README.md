@@ -93,6 +93,9 @@ Toke currently supports conversion into the syntax of the following libraries:
     * *libraryName* attribute: `datejs`
 * [Steven Levithan's Date Format](http://blog.stevenlevithan.com/archives/date-time-format "Steven Levithan's Date Format")
     * *libraryName* attribute: `stevenlevithan`
+* [PHP](http://php.net "PHP") (though [php.js](http://phpjs.org) is more relevant)
+    * Support for [strftime()](http://php.net/manual/en/function.strftime.php) and [strptime()](http://php.net/manual/en/function.strptime.php)
+    * *libraryName* attribute: `php`
 * [Moment.js](http://momentjs.com "Moment.js")
     * Obviously.
     * Will ignore `replaceUntranslatableTokens` and `translateEscapeCharacters` and output the input format string untouched.

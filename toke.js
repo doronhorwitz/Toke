@@ -17,7 +17,7 @@
 
 ;(function tokeModule(module, window, undefined) {
     "use strict";
-    
+
     var VERSION          = "0.1.0",
         //regex from Moment.js
         formattingTokens     = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|YYYYY|YYYY|YY|a|A|hh?|HH?|mm?|ss?|SS?S?|X|zz?|ZZ?|.)/g,
@@ -139,6 +139,35 @@
                     z:    "Z",
                     ZZ:   "o"
                 }
+            },
+            php: {
+                tokenPrefix: "%",
+                tokens: {
+                    MM:   "m",
+                    MMM:  "b",
+                    MMMM: "B",
+                    D:    "e",
+                    DD:   "d",
+                    DDDD: "j",
+                    d:    "w",
+                    ddd:  "a",
+                    dddd: "A",
+                    w:    "U",
+                    W:    "V",
+                    YY:   "y",
+                    YYYY: "Y",
+                    A:    "p",
+                    a:    "P",
+                    H:    "k",
+                    HH:   "H",
+                    h:    "l",
+                    hh:   "I",
+                    mm:   "M",
+                    ss:   "S",
+                    z:    "Z",
+                    zz:   "Z",
+                    X:    "x"
+                }
             }
         };
 
@@ -231,7 +260,7 @@
                     tokenLookup[libraryName].tokens[momentjsTokens[i]] = null;
                 }
             }
-        }   
+        }
     }
 
 }(window.Toke = window.Toke||{}, window));
