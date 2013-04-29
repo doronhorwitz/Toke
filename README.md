@@ -4,7 +4,7 @@ By [Doron Horwitz](http://milktek.com/ "milktek.com")
 
 Description
 -----------
-Use a single datetime token syntax throughout your project, irrespective of any 3rd party date-related library you may use. Toke uses a single token syntax and allows you to output a version which can be understood by the different libraries in your project.
+Use a single datetime token syntax throughout your Javascript project, irrespective of any 3rd party date-related library you may use. Toke uses a single token syntax and allows you to output a version which can be understood by the different libraries in your project.
 
 This allows you to set a single datetime format in a settings file and then ensure that any changes you make it to will be reflected across the whole project if you are using different libraries for date formatting.
 
@@ -102,7 +102,7 @@ Toke currently supports conversion into the syntax of the following libraries:
 Extending
 ---------
 If you need Toke to support a library it does not currently support, it is possible to add your own custom token dictionary lookup *before* Toke is included.
-For an example, see the example [custom_tokens.js](https://raw.github.com/doronhorwitz/Toke/master/custom_tokens.js "custom_tokens.js on GitHub") file for how to specify a custom lookup.  
+For an example, see the example [custom_tokens.js](https://raw.github.com/doronhorwitz/Toke/master/custom_tokens.js "custom_tokens.js on GitHub") file for how to specify a custom lookup.
 **Note that you have to specify the custom lookup before the Toke script is included, otherwise it will be ignored.**
 
 License
