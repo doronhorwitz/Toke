@@ -60,6 +60,11 @@ The function takes the following arguments:
     * Required: no
     * Default: `true`
     * Description: Moment.js uses the `[ ]` escape characters to deliniate that a token should not be processed as a token but rather as a string. If `translateEscapeCharacters` is set to `true` then the escape characters will be removed (or replaced with the escape characters of the destination library) in the output string, if `false` they will appear in the final string.
+* **includeTokenPrefixesAndSuffixes**
+    * Type: boolean
+    * Required: no
+    * Default: `true`
+    * Description: If set to `false` token prefixes and suffixes will not be output before and after tokens.
 
 ### Examples
 ```javascript

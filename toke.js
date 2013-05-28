@@ -171,13 +171,14 @@
             }
         };
 
-    module.convert = function convert(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters) {
-        var libraryName               = libraryName.toLowerCase(),
-            replaceUnregonisedTokens  = (typeof replaceUntranslatableTokens !== "boolean")?false:replaceUntranslatableTokens,
-            translateEscapeCharacters = (typeof translateEscapeCharacters !== "boolean")?true:translateEscapeCharacters;
+    module.convert = function convert(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters, includeTokenPrefixesAndSuffixes) {
+        var libraryName                     = libraryName.toLowerCase(),
+            replaceUnregonisedTokens        = (typeof replaceUntranslatableTokens !== "boolean")?false:replaceUntranslatableTokens,
+            translateEscapeCharacters       = (typeof translateEscapeCharacters !== "boolean")?true:translateEscapeCharacters;
+            includeTokenPrefixesAndSuffixes = (typeof includeTokenPrefixesAndSuffixes !== "boolean")?true:includeTokenPrefixesAndSuffixes;
 
         if (libraryName in tokenLookup) {
-            return doConversion(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters);
+            return doConversion(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters, includeTokenPrefixesAndSuffixes);
         } else if (libraryName === "momentjs") {
             return originalFormatString
         } else {
@@ -197,15 +198,15 @@
         return input.replace(/\\/g, "");
     }
 
-    function doConversion(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters) {
+    function doConversion(originalFormatString, libraryName, replaceUntranslatableTokens, translateEscapeCharacters, includeTokenPrefixesAndSuffixes) {
         var array = originalFormatString.match(formattingTokens), i, length;
 
         for (i = 0, length = array.length; i < length; i++) {
             var lookedUpToken = tokenLookup[libraryName].tokens[array[i]];
             if (lookedUpToken) {
-                array[i] =  tokenLookup[libraryName].tokenPrefix +
+                array[i] =  ((includeTokenPrefixesAndSuffixes)?tokenLookup[libraryName].tokenPrefix:'') +
                             lookedUpToken +
-                            tokenLookup[libraryName].tokenSuffix;
+                            ((includeTokenPrefixesAndSuffixes)?tokenLookup[libraryName].tokenSuffix:'');
             } else if ((lookedUpToken === null) && replaceUntranslatableTokens) {
                 array[i] = tokenLookup[libraryName].noTranslationMarker||"";
             } else {
