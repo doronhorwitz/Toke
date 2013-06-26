@@ -109,9 +109,9 @@ Toke currently supports conversion into the syntax of the following libraries:
 
 Extending
 ---------
-If you need Toke to support a library it does not currently support, it is possible to add your own custom token dictionary lookup *before* Toke is included.
-For an example, see the example [custom_tokens.js](https://raw.github.com/doronhorwitz/Toke/master/custom_tokens.js "custom_tokens.js on GitHub") file for how to specify a custom lookup.
-**Note that you have to specify the custom lookup before the Toke script is included, otherwise it will be ignored.**
+If you need Toke to support a library it does not currently support, it is possible to add your own custom token dictionary lookup *before* or *after* Toke is included.
+To add a custom token lookup *after* Toke is included use the `Toke.addCustomTokenLookup` function.
+To add a custom token lookup *before* Toke is included,  see the example [custom_tokens.js](https://raw.github.com/doronhorwitz/Toke/master/custom_tokens.js "custom_tokens.js on GitHub").
 
 License
 -------

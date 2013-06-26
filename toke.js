@@ -18,7 +18,7 @@
 ;(function tokeModule(module, window, undefined) {
     "use strict";
 
-    var VERSION          = "0.1.0",
+    var VERSION          = "0.1.1",
         //regex from Moment.js
         formattingTokens     = /(\[[^\[]*\])|(\\)?(Mo|MM?M?M?|Do|DDDo|DD?D?D?|ddd?d?|do?|w[o|w]?|W[o|W]?|YYYYY|YYYY|YY|a|A|hh?|HH?|mm?|ss?|SS?S?|X|zz?|ZZ?|.)/g,
         //the "dd" token is included even though it is not mentioned in http://momentjs.com/docs/#/displaying/format/, it does exist
@@ -186,6 +186,55 @@
         }
     };
 
+    module.addCustomTokenLookup = function addCustomTokenLookup(customTokenLookup) {
+        //insert custom token lookups
+        var newLibraryNames = [];
+        if (typeof customTokenLookup === "object") {
+            for (var libraryName in customTokenLookup) {
+                if (Object.prototype.hasOwnProperty.call(customTokenLookup, libraryName) &&
+                    (typeof customTokenLookup[libraryName] === "object")) {
+                    newLibraryNames.push(libraryName);
+                    tokenLookup[libraryName] = customTokenLookup[libraryName];
+                }
+            }
+        }
+
+        fillLookupParams(newLibraryNames);
+    };
+
+    function fillLookupParams(newLibraryNames) {
+        //resiliency for custom and internal library token lookups
+        for (var i = 0; i < newLibraryNames.length; i++) {
+            if (Object.prototype.hasOwnProperty.call(tokenLookup, newLibraryNames[i])) {
+
+                //ensure lookup is an object
+                if (typeof tokenLookup[newLibraryNames[i]] !== "object") {
+                    tokenLookup[newLibraryNames[i]] = {};
+                }
+
+                var j;
+
+                //ensure the lookup has all the required fields
+                for (j = 0; j < lookupRequiredFields.length; j++) {
+                    var lookupFieldName = lookupRequiredFields[j][0],
+                        lookupFieldType = lookupRequiredFields[j][1],
+                        libraryLookup   = tokenLookup[newLibraryNames[i]];
+
+                    if (typeof libraryLookup[lookupFieldName] !== lookupFieldType) {
+                        libraryLookup[lookupFieldName] = lookupDefaultValues[lookupFieldType]
+                    }
+                }
+
+                //ensure that all the lookup tokens that aren't strings, become null
+                for (j = 0; j < momentjsTokens.length; j++) {
+                    if (typeof tokenLookup[newLibraryNames[i]].tokens[momentjsTokens[j]] !== "string") {
+                        tokenLookup[newLibraryNames[i]].tokens[momentjsTokens[j]] = null;
+                    }
+                }
+            }
+        }
+    }
+
     module.version = VERSION;
 
     //from Moment.js
@@ -223,45 +272,14 @@
     TokeError.prototype = new Error();
     TokeError.prototype.constructor = TokeError;
 
-    //insert custom token lookups
-    if (typeof module.customTokenLookup === "object") {
-        for (var libraryName in module.customTokenLookup) {
-            if (Object.prototype.hasOwnProperty.call(module.customTokenLookup, libraryName) &&
-                (typeof module.customTokenLookup[libraryName] === "object")) {
-                tokenLookup[libraryName] = module.customTokenLookup[libraryName];
-            }
-        }
-    }
-
-    //resiliency for externally added library token lookups
+    //get all current library names ensure that all relevant params for the lookup are filled in
+    var libraryNames = [];
     for (var libraryName in tokenLookup) {
-        if (Object.prototype.hasOwnProperty.call(tokenLookup, libraryName)) {
-
-            //ensure lookup is an object
-            if (typeof tokenLookup[libraryName] !== "object") {
-                tokenLookup[libraryName] = {};
-            }
-
-            var i;
-
-            //ensure the lookup has all the required fields
-            for (i = 0; i < lookupRequiredFields.length; i++) {
-                var lookupFieldName = lookupRequiredFields[i][0],
-                    lookupFieldType = lookupRequiredFields[i][1],
-                    libraryLookup   = tokenLookup[libraryName];
-
-                if (typeof libraryLookup[lookupFieldName] !== lookupFieldType) {
-                    libraryLookup[lookupFieldName] = lookupDefaultValues[lookupFieldType]
-                }
-            }
-
-            //ensure that all the lookup tokens that aren't strings, become null
-            for (i = 0; i < momentjsTokens.length; i++) {
-                if (typeof tokenLookup[libraryName].tokens[momentjsTokens[i]] !== "string") {
-                    tokenLookup[libraryName].tokens[momentjsTokens[i]] = null;
-                }
-            }
-        }
+        libraryNames.push(libraryName);
     }
+    fillLookupParams(libraryNames);
+
+    //look if a customTokenLookup was specified before Toke was loaded. If so, load it.
+    module.addCustomTokenLookup(module.customTokenLookup);
 
 }(window.Toke = window.Toke||{}, window));
