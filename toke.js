@@ -1,8 +1,8 @@
 /*!
- * Toke v0.1.0
+ * Toke v0.1.1
  * Doron Horwitz
  * https://github.com/doronhorwitz/Toke
- * Date: 2013-04-05
+ * Date: 2013-02-20
  *
  * Copyright 2013 Doron Horwitz
  * Released under the BSD New License
@@ -65,7 +65,7 @@
                     SS:   "ff",
                     SSS:  "f",
                     Z:    "isotz",
-                    ZZ:   "tz",
+                    ZZ:   "tz"
                 }
             },
             jqueryui: {
